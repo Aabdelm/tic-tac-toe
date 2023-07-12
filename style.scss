@@ -3,7 +3,33 @@
     padding: 0;
     box-sizing: border-box;
 }
+//intialize body, html
 html, body{
-    width: 100%;
     height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: wheat;
+}
+//initialize game board
+.gameboard{
+    //initalize grid
+    display: grid;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    width: 45%;
+    height: 90%;
+}
+//tile properties
+.tile{
+    /*
+    TODO: IMPROVE GRID ONCE JS IS FIGURED OUT
+    */
+    border: solid black 1px;
+    transition: ease-out 0.3s;
+    &:hover{
+        cursor: pointer;
+        background-color: rgba(128, 128, 128, 0.5);
+    }
 }
