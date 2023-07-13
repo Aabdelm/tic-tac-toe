@@ -26,10 +26,31 @@ html, body{
     /*
     TODO: IMPROVE GRID ONCE JS IS FIGURED OUT
     */
-    border: solid black 1px;
+    
     transition: ease-out 0.3s;
     &:hover{
         cursor: pointer;
-        background-color: rgba(128, 128, 128, 0.5);
+        background-color: #80808080;
     }
+}
+
+
+//handle columns grid styling
+.tile{
+    &:nth-of-type(3n-1){
+        border-left: solid black 10px;
+        border-right: solid black 10px;
+    }
+    
+}
+
+//handle row grid styling
+.tile{
+    border-bottom: solid black 10px;
+
+    //remove styling from last track
+    &:nth-of-type(n+7){
+        border-bottom: none;
+    }
+    
 }
