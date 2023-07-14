@@ -12,7 +12,7 @@ const Player = (name, marker) =>{
 //initialize gameboard module
 const Gameboard = (function(){
     //initialize 2d array
-    const gameBoard = [
+    const _gameBoard = [
         ["","",""],
         ["","",""],
         ["","",""]
@@ -23,12 +23,33 @@ const Gameboard = (function(){
     note: this will be a private method later 
     (for now will be returned for testing purposes)
     */
-    const mark = (row, tile) => {
-        gameBoard[row][tile] = "test";
+    const _mark = (row, tile, currentPlayer) => {
+        _gameBoard[row][tile] = currentPlayer.retrieveMarker();
     }
 
     //initialize gameboard retrieval
     //note: this is created such that the user won't directly mod the board
-    const retrieveBoard = () => console.log(gameBoard);
-    return{mark, retrieveBoard};
+    const retrieveBoard = () => _gameBoard.map(row => [...row]);
+
+    //return methods
+    return{retrieveBoard,
+    mark: function(row, tile){
+        _mark(row, tile, GameController.retrievePlayer());
+    }};
+})();
+
+const GameController = (function(){
+    // initialize players
+    const playerOne = Player("PlayerOne","X");
+    const playerTwo = Player("PlayerTwo", "O");
+
+    //initialize array for current players
+    const players = [playerOne, playerTwo];
+    const currentPlayer = players[0];
+
+    const switchPlayer = () => currentPlayer === players[0] ? players[1] : players[0];
+    const retrievePlayer = () => currentPlayer;
+
+    return({retrievePlayer, switchPlayer});
+
 })();
