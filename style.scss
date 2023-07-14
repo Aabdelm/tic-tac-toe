@@ -22,11 +22,7 @@ html, body{
     height: 90%;
 }
 //tile properties
-.tile{
-    /*
-    TODO: IMPROVE GRID ONCE JS IS FIGURED OUT
-    */
-    
+.tile{    
     transition: ease-out 0.3s;
     &:hover{
         cursor: pointer;
