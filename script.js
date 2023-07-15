@@ -45,11 +45,25 @@ const GameController = (function(){
 
     //initialize array for current players
     const players = [playerOne, playerTwo];
-    const currentPlayer = players[0];
+    let currentPlayer = players[0];
 
-    const switchPlayer = () => currentPlayer === players[0] ? players[1] : players[0];
+    //initialize variables for player handling
+    const switchPlayer = () => currentPlayer = currentPlayer == players[0] ? players[1] : players[0];
     const retrievePlayer = () => currentPlayer;
 
-    return({retrievePlayer, switchPlayer});
+    const startRound = ()=>{
+        console.log(`${currentPlayer.retrieveName()}, it's your turn!`);
+        console.log(`Use GameController.playRound(row, tile) to place your marker!`);
+        console.log(Gameboard.retrieveBoard());
+    }
+
+    const playRound = (row, tile) =>{
+        Gameboard.mark(row, tile);
+        switchPlayer();
+        startRound();
+    }
+    startRound();
+
+    return({retrievePlayer, playRound});
 
 })();
