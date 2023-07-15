@@ -24,6 +24,10 @@ const Gameboard = (function(){
     (for now will be returned for testing purposes)
     */
     const _mark = (row, tile, currentPlayer) => {
+        // if it's taken, stop execution
+        if(_gameBoard[row][tile] !== "") return "";
+
+        // place marker
         _gameBoard[row][tile] = currentPlayer.retrieveMarker();
     }
 
@@ -51,19 +55,81 @@ const GameController = (function(){
     const switchPlayer = () => currentPlayer = currentPlayer == players[0] ? players[1] : players[0];
     const retrievePlayer = () => currentPlayer;
 
+    //starts round
     const startRound = ()=>{
+        //display current player and tiles
         console.log(`${currentPlayer.retrieveName()}, it's your turn!`);
         console.log(`Use GameController.playRound(row, tile) to place your marker!`);
         console.log(Gameboard.retrieveBoard());
     }
 
+    //play round by marking the tile
     const playRound = (row, tile) =>{
         Gameboard.mark(row, tile);
+
+        // check for wins
+        let win = GameLogic.checkWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        if(win){
+            //announce wins and break away from the function
+            console.log(`${retrievePlayer().retrieveMarker()} wins!`);
+            console.log(Gameboard.retrieveBoard());
+            return ;
+        }
+
+        //switch player and restart round
         switchPlayer();
         startRound();
     }
+    // initalize round start
     startRound();
 
     return({retrievePlayer, playRound});
 
 })();
+
+// Create module for game logic that handles wins
+const GameLogic = (() => {
+    const checkNonDiagonalWins = (gameBoard, currentMarker) => {
+      // initialize counts
+      let vertCount = 0;
+      let horizCount = 0;
+  
+      // check for both vertical and horizontal wins
+      for (let i = 0; i < gameBoard.length; i++) {
+        for (let j = 0; j < gameBoard.length; j++) {
+          if (gameBoard[i][j] === currentMarker) horizCount++;
+          if (gameBoard[j][i] === currentMarker) vertCount++;
+        }
+        if (horizCount >= 3 || vertCount >= 3) return true;
+
+        //reset counts
+        horizCount = 0;
+        vertCount = 0;
+      }
+      // return false if there are no non-diagonal wins
+      return false;
+    };
+
+    const checkDiagonalWins = (gameBoard, currentMarker) => {
+      let diagonalCount = 0;
+      let reverseDiagonalCount = 0;
+
+      //check for diagonal wins in both directions
+      for (let i = 0; i < gameBoard.length; i++) {
+        if (gameBoard[i][i] === currentMarker) diagonalCount++;
+        if (gameBoard[i][gameBoard.length - 1 - i] === currentMarker) reverseDiagonalCount++;
+      }
+      return diagonalCount === 3 || reverseDiagonalCount === 3;
+    };
+
+    // check for wins in both directions
+    const checkWin = (gameBoard, currentMarker) => {
+      return checkDiagonalWins(gameBoard, currentMarker) || checkNonDiagonalWins(gameBoard, currentMarker);
+    };
+  
+    return {checkWin};
+  })();
+  
+
+  
+  
