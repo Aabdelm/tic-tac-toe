@@ -69,10 +69,15 @@ const GameController = (function(){
 
         // check for wins
         let win = GameLogic.checkWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        let draw = GameLogic.checkDraw(Gameboard.retrieveBoard());
         if(win){
             //announce wins and break away from the function
             console.log(`${retrievePlayer().retrieveMarker()} wins!`);
             console.log(Gameboard.retrieveBoard());
+            return ;
+        }
+        if(draw){
+            console.log("Draw");
             return ;
         }
 
@@ -126,8 +131,13 @@ const GameLogic = (() => {
     const checkWin = (gameBoard, currentMarker) => {
       return checkDiagonalWins(gameBoard, currentMarker) || checkNonDiagonalWins(gameBoard, currentMarker);
     };
-  
-    return {checkWin};
+
+    //check for tie
+    const checkDraw = (gameBoard) => {
+        // Check if all rows have no available spaces
+        return gameBoard.every(row => row.every(tile => tile !== ""));
+      };
+    return {checkWin, checkDraw};
   })();
   
 
