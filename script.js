@@ -184,16 +184,24 @@ const GameLogic = (() => {
 
     // read board and updates accordingly
     function domMark(e){
+      // check for win or draw
+      const currentPlayer = GameController.retrievePlayer();
+      let win = GameLogic.checkWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+      let draw = GameLogic.checkDraw(Gameboard.retrieveBoard());
+
+      //stop the game if a win or draw is detected
+      if(win || draw){return ;}
 
       // retrieve respective tile and row
       const tile = e.target.dataset.tile;
       const row = e.target.dataset.row;
 
-      //play round
+      // play round
       GameController.playRound(row, tile);
 
-      //regenerate board
+      // regenerate board
       generateBoard();
+      
     }
 
     //add event listener
