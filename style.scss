@@ -24,14 +24,17 @@ button{
 .gameboard{
     //initalize grid
     display: grid;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: repeat(3, 1fr);
-    width: 45%;
-    height: 90%;
+    grid-template-rows: repeat(3, minmax(10px, 1fr));
+    grid-template-columns: repeat(3, minmax(10px, 1fr));
+    width: 650px;
+    height: 600px;
 }
 //tile properties
 .tile{    
+    font-family: 'roboto';
+    font-weight: 500;
     transition: ease-out 0.3s;
+    font-size: 100px;
     &:hover{
         cursor: pointer;
         background-color: #80808080;

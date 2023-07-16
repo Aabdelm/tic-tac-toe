@@ -144,8 +144,10 @@ const GameLogic = (() => {
   const DomBoard = (function(){
     //create function for linking each dom element to the board
     const domBoard = document.querySelector('.gameboard');
-    
     const generateBoard = () =>{
+      //retrieve gameboard
+      const gameBoard = Gameboard.retrieveBoard();
+
         // Initialize row and tile variables
         let row = 0;
         let tile = 0;
@@ -162,12 +164,28 @@ const GameLogic = (() => {
                 domBoard.children[i].dataset.tile = tile;
                 domBoard.children[i].dataset.row = row;
 
+                // Get textcontent for boards if need be
+                domBoard.children[i].textContent = gameBoard[row][tile];
+
+
                 // Increment tile
                 tile++;
             
         }
     }
     generateBoard();
+
+    // 
+    function domMark(e){
+      const tile = e.target.dataset.tile;
+      const row = e.target.dataset.row;
+      GameController.playRound(row, tile);
+      generateBoard();
+    }
+
+    //add event listener
+    domBoard.addEventListener(`click`, domMark)
+
 
 
     
