@@ -12,6 +12,14 @@ html, body{
     align-items: center;
     background-color: wheat;
 }
+
+//reset button
+button{
+    background-color: inherit;
+    border: none;
+}
+
+
 //initialize game board
 .gameboard{
     //initalize grid

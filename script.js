@@ -140,6 +140,36 @@ const GameLogic = (() => {
     return {checkWin, checkDraw};
   })();
   
+  //create dom functionality
+  const DomBoard = (function(){
+    //create function for linking each dom element to the board
+    const domBoard = document.querySelector('.gameboard');
+    
+    const generateBoard = () =>{
+        // Initialize row and tile variables
+        let row = 0;
+        let tile = 0;
 
-  
-  
+        // Create a for loop to iterate over the board tiles in the DOM
+        for(let i =0; i < domBoard.children.length; i++){
+
+            // Reset tile and increase row once i is divisble by 3
+            if(i !== 0 && i %3 == 0){
+                tile = 0;
+                row++;
+            }
+                // Create data attributes
+                domBoard.children[i].dataset.tile = tile;
+                domBoard.children[i].dataset.row = row;
+
+                // Increment tile
+                tile++;
+            
+        }
+    }
+    generateBoard();
+
+
+    
+   
+  })();
