@@ -25,9 +25,11 @@ const Gameboard = (function(){
     */
     const _mark = (row, tile, currentPlayer) => {
         // if it's taken, stop execution
-        if(_gameBoard[row][tile] !== ""){
-          return false;
-        }
+        if(_gameBoard[row][tile] !== "") return ;
+
+        // fail-safe just in case a user attempts 
+        //to add out-of bounds
+        else if(row > 2 && tile > 2) return ;
 
         // place marker
         _gameBoard[row][tile] = currentPlayer.retrieveMarker();
