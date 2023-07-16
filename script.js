@@ -25,10 +25,13 @@ const Gameboard = (function(){
     */
     const _mark = (row, tile, currentPlayer) => {
         // if it's taken, stop execution
-        if(_gameBoard[row][tile] !== "") return "";
+        if(_gameBoard[row][tile] !== ""){
+          return false;
+        }
 
         // place marker
         _gameBoard[row][tile] = currentPlayer.retrieveMarker();
+        return true;
     }
 
     //initialize gameboard retrieval
@@ -38,7 +41,7 @@ const Gameboard = (function(){
     //return methods
     return{retrieveBoard,
     mark: function(row, tile){
-        _mark(row, tile, GameController.retrievePlayer());
+        return _mark(row, tile, GameController.retrievePlayer());
     }};
 })();
 
@@ -65,7 +68,7 @@ const GameController = (function(){
 
     //play round by marking the tile
     const playRound = (row, tile) =>{
-        Gameboard.mark(row, tile);
+        const marked = Gameboard.mark(row, tile);
 
         // check for wins
         let win = GameLogic.checkWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
@@ -81,9 +84,11 @@ const GameController = (function(){
             return ;
         }
 
-        //switch player and restart round
-        switchPlayer();
-        startRound();
+        if(marked){
+          //switch player and restart round
+          switchPlayer();
+          startRound();
+        }
     }
     // initalize round start
     startRound();
@@ -173,13 +178,21 @@ const GameLogic = (() => {
             
         }
     }
+
+    // initialize generation
     generateBoard();
 
-    // 
+    // read board and updates accordingly
     function domMark(e){
+
+      // retrieve respective tile and row
       const tile = e.target.dataset.tile;
       const row = e.target.dataset.row;
+
+      //play round
       GameController.playRound(row, tile);
+
+      //regenerate board
       generateBoard();
     }
 
