@@ -171,9 +171,6 @@ const GameLogic = (() => {
                 domBoard.children[i].dataset.tile = tile;
                 domBoard.children[i].dataset.row = row;
 
-                // Get textcontent for boards if need be
-                domBoard.children[i].textContent = gameBoard[row][tile];
-
 
                 // Increment tile
                 tile++;
@@ -183,6 +180,33 @@ const GameLogic = (() => {
 
     // initialize generation
     generateBoard();
+
+    /*
+      Updates row based on player icon
+      @params
+      row - the grid row
+      tile - the grid tile
+      icon - the board icon
+      @updates HTML tile
+    */
+    const updateBoard = (row, tile, icon) =>{
+      // use spread operator to get html tiles based on the row
+      const rowArr = [...document.querySelectorAll(`[data-row="${row}"]`)];
+
+      // get the tile based on the row array
+      const domTile = rowArr[tile];
+
+      // create new image element
+      const img = document.createElement("img");
+
+      // add image
+      // Note: The ${icon} is used since the files were named based on that
+      // This allows for easy selection
+      img.setAttribute("src",`media/${icon}.svg`);
+
+      // Append child
+      domTile.appendChild(img);
+    }
 
     // read board and updates accordingly
     function domMark(e){
@@ -200,6 +224,7 @@ const GameLogic = (() => {
 
       // play round
       GameController.playRound(row, tile);
+      updateBoard(row, tile, currentPlayer.retrieveMarker());
 
       // regenerate board
       generateBoard();
