@@ -208,6 +208,25 @@ const GameLogic = (() => {
       domTile.appendChild(img);
     }
 
+    /*
+     Updates announcer based on who's playing
+     @updates the board
+    */
+   const updateAnnouncer = () => {
+    // retrieve the current player
+    const player = GameController.retrievePlayer();
+
+    // get the announcer element
+    const announcer = document.querySelector(".announcer");
+
+    // select image attribute
+    const img = announcer.querySelector("img");
+
+    // set image attribute to current player
+    img.setAttribute("src",`media/${player.retrieveMarker()}.svg`);
+
+   }
+
     // read board and updates accordingly
     function domMark(e){
       // check for win or draw
@@ -226,8 +245,7 @@ const GameLogic = (() => {
       GameController.playRound(row, tile);
       updateBoard(row, tile, currentPlayer.retrieveMarker());
 
-      // regenerate board
-      generateBoard();
+      updateAnnouncer();
       
     }
 
