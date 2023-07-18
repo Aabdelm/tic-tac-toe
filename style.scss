@@ -36,6 +36,7 @@ button{
 }
 //tile properties
 .tile{    
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,4 +87,15 @@ button{
 }
 .mini{
     height: 2rem;
+}
+.override{
+    position: absolute;
+    width: 100%;
+    border: solid black 5px;
+}
+.vertical{
+    transform: rotate(90deg);
+
+    //mitigate some alignment issues
+    margin-right: 8px;
 }
