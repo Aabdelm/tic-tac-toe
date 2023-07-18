@@ -102,20 +102,39 @@ const GameController = (function(){
 // Create module for game logic that handles wins
 const GameLogic = (() => {
     const checkNonDiagonalWins = (gameBoard, currentMarker) => {
+      return checkHorizontalWin(gameBoard, currentMarker) || checkVerticalWin(gameBoard, currentMarker);
+    };
+
+    const checkHorizontalWin = (gameBoard, currentMarker) => {
       // initialize counts
-      let vertCount = 0;
       let horizCount = 0;
   
       // check for both vertical and horizontal wins
       for (let i = 0; i < gameBoard.length; i++) {
         for (let j = 0; j < gameBoard.length; j++) {
           if (gameBoard[i][j] === currentMarker) horizCount++;
-          if (gameBoard[j][i] === currentMarker) vertCount++;
         }
-        if (horizCount >= 3 || vertCount >= 3) return true;
+        if (horizCount >= 3) return true;
 
         //reset counts
         horizCount = 0;
+      }
+      // return false if there are no non-diagonal wins
+      return false;
+    };
+
+    const checkVerticalWin = (gameBoard, currentMarker) => {
+      // initialize counts
+      let vertCount = 0;
+  
+      // check for vertical wins
+      for (let i = 0; i < gameBoard.length; i++) {
+        for (let j = 0; j < gameBoard.length; j++) {
+          if (gameBoard[j][i] === currentMarker) vertCount++;
+        }
+        if (vertCount >= 3) return true;
+
+        //reset counts
         vertCount = 0;
       }
       // return false if there are no non-diagonal wins
@@ -144,7 +163,7 @@ const GameLogic = (() => {
         // Check if all rows have no available spaces
         return gameBoard.every(row => row.every(tile => tile !== ""));
       };
-    return {checkWin, checkDraw};
+    return {checkWin, checkDraw, checkVerticalWin, checkHorizontalWin};
   })();
   
   //create dom functionality
@@ -152,8 +171,6 @@ const GameLogic = (() => {
     //create function for linking each dom element to the board
     const domBoard = document.querySelector('.gameboard');
     const generateBoard = () =>{
-      //retrieve gameboard
-      const gameBoard = Gameboard.retrieveBoard();
 
         // Initialize row and tile variables
         let row = 0;
