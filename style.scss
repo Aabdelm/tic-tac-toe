@@ -99,3 +99,19 @@ button{
     //mitigate some alignment issues
     margin-right: 8px;
 }
+
+.diagonal{
+    // mitigate alignment issues
+    transform: rotate(42deg);
+
+    width: 260px;
+    border: solid black 8px;
+}
+
+.reverse-diagonal{
+    // mitigate alignment issues
+    transform: rotate(-42deg);
+
+    width: 260px;
+    border: solid black 8px
+}
