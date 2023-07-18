@@ -140,18 +140,35 @@ const GameLogic = (() => {
       // return false if there are no non-diagonal wins
       return false;
     };
-
-    const checkDiagonalWins = (gameBoard, currentMarker) => {
+    
+    /*
+    Methods for deconstructed diagonal wins
+    Note: These were deconstructed for dom manipulation purposes
+    */
+    const checkDiagonalWin = (gameBoard, currentMarker) => {
       let diagonalCount = 0;
-      let reverseDiagonalCount = 0;
 
       //check for diagonal wins in both directions
       for (let i = 0; i < gameBoard.length; i++) {
         if (gameBoard[i][i] === currentMarker) diagonalCount++;
+      }
+      return diagonalCount === 3;
+    };
+
+    const checkReverseDiagonalWin = (gameBoard, currentMarker) =>{
+      let reverseDiagonalCount = 0;
+
+      //check for diagonal wins in both directions
+      for (let i = 0; i < gameBoard.length; i++) {
         if (gameBoard[i][gameBoard.length - 1 - i] === currentMarker) reverseDiagonalCount++;
       }
-      return diagonalCount === 3 || reverseDiagonalCount === 3;
-    };
+      return reverseDiagonalCount === 3;
+    }
+    //
+
+    const checkDiagonalWins = (gameBoard, currentMarker) =>{
+      return checkDiagonalWin(gameBoard, currentMarker) || checkReverseDiagonalWin(gameBoard, currentMarker);
+    }
 
     // check for wins in both directions
     const checkWin = (gameBoard, currentMarker) => {
@@ -163,7 +180,13 @@ const GameLogic = (() => {
         // Check if all rows have no available spaces
         return gameBoard.every(row => row.every(tile => tile !== ""));
       };
-    return {checkWin, checkDraw, checkVerticalWin, checkHorizontalWin};
+    return {
+      // generic methods
+      checkWin, checkDraw, 
+
+      // deconstructed methods for dom manipulation
+      checkVerticalWin, 
+      checkHorizontalWin, checkDiagonalWin, checkReverseDiagonalWin};
   })();
   
   //create dom functionality
