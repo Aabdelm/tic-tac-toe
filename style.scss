@@ -88,11 +88,19 @@ button{
 .mini{
     height: 2rem;
 }
+
+/*
+Override methods
+*/
+
+// horizontal default
 .override{
     position: absolute;
     width: 100%;
     border: solid black 5px;
 }
+
+// others
 .vertical{
     transform: rotate(90deg);
 
@@ -115,3 +123,5 @@ button{
     width: 260px;
     border: solid black 8px
 }
+//
+
