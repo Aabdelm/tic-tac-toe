@@ -119,6 +119,7 @@ Override methods
 .reverse-diagonal{
     // mitigate alignment issues
     transform: rotate(-42deg);
+    margin-right: 15px;
 
     width: 260px;
     border: solid black 8px
