@@ -248,6 +248,40 @@ const GameLogic = (() => {
       domTile.appendChild(img);
     }
 
+       /*
+     Crosses board based on win
+     @params
+      winningRow - the winning/final row
+      winningTile - the winning/final tile
+
+     @updates the HTML board
+    */
+   const crossBoard = (winningRow, winningTile, verticalWin, horizontalWin, diagonalWin, reverseDiagonalWin) =>{
+    // grab rows and columns/tiles
+    // Note: This will help us for the diagonal win handling
+     const domColumns = [...document.querySelectorAll(`[data-tile="${winningTile}"]`)];
+     const domRows = [...document.querySelectorAll(`[data-row="${winningRow}"]`)];
+
+     for(let i =0; i< domColumns.length; i++){
+      // initialize markdown / override variable
+      const override = document.createElement("div");
+
+      // add override class. This will be necessary to mark over the elements.
+      override.classList.add("override");
+      //check if vertical or horizontal win
+        if(verticalWin){
+          // add the vertical modification to rotate mark
+          override.classList.add("vertical")
+          
+          // Append override the winning column
+          domColumns[i].appendChild(override);
+        }else if(horizontalWin){
+          domRows[i].appendChild(override);
+        }
+     }
+    
+   }
+
     /*
      Updates announcer based on who's playing
      @updates the board
@@ -284,6 +318,17 @@ const GameLogic = (() => {
       // play round
       GameController.playRound(row, tile);
       updateBoard(row, tile, currentPlayer.retrieveMarker());
+
+      //final check for win/draw
+       win = GameLogic.checkWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+       draw = GameLogic.checkDraw(Gameboard.retrieveBoard());
+       if(win){
+        const horizontalWin = GameLogic.checkHorizontalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        const vertWin = GameLogic.checkVerticalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        const diagWin = GameLogic.checkDiagonalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        const revDiagWin = GameLogic.checkReverseDiagonalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        crossBoard(row, tile, vertWin, horizontalWin, diagWin, revDiagWin);
+       }
 
       updateAnnouncer();
       
