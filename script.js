@@ -253,7 +253,7 @@ const GameLogic = (() => {
       // Append child
       domTile.appendChild(img);
 
-      updateAnnouncer();
+      
 
       const currentPlayer = GameController.retrievePlayer();
       
@@ -267,6 +267,7 @@ const GameLogic = (() => {
         const revDiagWin = GameLogic.checkReverseDiagonalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
         crossBoard(row, tile, vertWin, horizontalWin, diagWin, revDiagWin);
        }
+       updateAnnouncer(win, draw);
     }
 
        /*
@@ -326,18 +327,31 @@ const GameLogic = (() => {
      Updates announcer based on who's playing
      @updates the board
     */
-   const updateAnnouncer = () => {
+   const updateAnnouncer = (win, draw) => {
     // retrieve the current player
     const player = GameController.retrievePlayer();
 
     // get the announcer element
     const announcer = document.querySelector(".announcer");
 
+    //grab span (will be useful for changing text content without affecting what's around)
+    const winner = document.querySelector("#winner");
+
     // select image attribute
     const img = announcer.querySelector("img");
 
     // set image attribute to current player
     img.setAttribute("src",`media/${player.retrieveMarker()}.svg`);
+
+    //if win
+    if(win){
+      //keep the image, set the text content to indicate win
+      winner.textContent = "wins!";
+    }else if(draw){
+      //use announcer instead of winner selector
+      //this will reset the entire content and remove the icon
+      announcer.textContent = "Draw";
+    }
 
    }
 
