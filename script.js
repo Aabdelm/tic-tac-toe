@@ -25,11 +25,17 @@ const Gameboard = (function(){
     */
     const _mark = (row, tile, currentPlayer) => {
         // if it's taken, stop execution
-        if(_gameBoard[row][tile] !== "") return ;
+        if(_gameBoard[row][tile] !== ""){
+          console.log("Tile is taken!");
+          return ;
+        }
 
         // fail-safe just in case a user attempts 
         //to add out-of bounds
-        else if(row > 2 && tile > 2) return ;
+        else if(row > 2 || tile > 2){ 
+          console.log("Tile or row is out of bounds!");
+          return ;
+        }
 
         // place marker
         _gameBoard[row][tile] = currentPlayer.retrieveMarker();
