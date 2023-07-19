@@ -252,6 +252,21 @@ const GameLogic = (() => {
 
       // Append child
       domTile.appendChild(img);
+
+      updateAnnouncer();
+
+      const currentPlayer = GameController.retrievePlayer();
+      
+      //final check for win/draw
+       win = GameLogic.checkWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+       draw = GameLogic.checkDraw(Gameboard.retrieveBoard());
+       if(win){
+        const horizontalWin = GameLogic.checkHorizontalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        const vertWin = GameLogic.checkVerticalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        const diagWin = GameLogic.checkDiagonalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        const revDiagWin = GameLogic.checkReverseDiagonalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
+        crossBoard(row, tile, vertWin, horizontalWin, diagWin, revDiagWin);
+       }
     }
 
        /*
@@ -344,18 +359,9 @@ const GameLogic = (() => {
       GameController.playRound(row, tile);
       updateBoard(row, tile, currentPlayer.retrieveMarker());
 
-      //final check for win/draw
-       win = GameLogic.checkWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
-       draw = GameLogic.checkDraw(Gameboard.retrieveBoard());
-       if(win){
-        const horizontalWin = GameLogic.checkHorizontalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
-        const vertWin = GameLogic.checkVerticalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
-        const diagWin = GameLogic.checkDiagonalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
-        const revDiagWin = GameLogic.checkReverseDiagonalWin(Gameboard.retrieveBoard(), currentPlayer.retrieveMarker());
-        crossBoard(row, tile, vertWin, horizontalWin, diagWin, revDiagWin);
-       }
+      
 
-      updateAnnouncer();
+      
       
     }
 
