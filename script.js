@@ -277,12 +277,31 @@ const GameLogic = (() => {
       //check if vertical or horizontal win
         if(verticalWin){
           // add the vertical modification to rotate mark
-          override.classList.add("vertical")
+          override.classList.add("vertical");
           
           // Append override the winning column
           domColumns[i].appendChild(override);
         }else if(horizontalWin){
           domRows[i].appendChild(override);
+        }
+
+        // check if diagonal win or reverse Diagonal win
+        if(diagonalWin || reverseDiagonalWin){
+          // create temporary row
+          //Note: The goal is to grab rows that also have a similar tile
+          //E.g row 0, column0, row1, column1, etc..
+          //i is used here since we have the same number of rows and columns 
+          const tempRow = [...document.querySelectorAll(`[data-tile="${i}"]`)];
+          //if its a diagonal win, add diagonal class
+          if(diagonalWin){
+            override.classList.add("diagonal");
+            tempRow[i].appendChild(override);
+          }else if(reverseDiagonalWin){
+            override.classList.add("reverse-diagonal");
+            tempRow[tempRow.length - i - 1].appendChild(override);
+            
+          }
+
         }
      }
     
