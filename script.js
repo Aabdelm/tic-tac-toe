@@ -12,7 +12,7 @@ const Player = (name, marker) =>{
 //initialize gameboard module
 const Gameboard = (function(){
     //initialize 2d array
-    const _gameBoard = [
+    let _gameBoard = [
         ["","",""],
         ["","",""],
         ["","",""]
@@ -27,20 +27,35 @@ const Gameboard = (function(){
         // if it's taken, stop execution
         if(_gameBoard[row][tile] !== ""){
           throw new Error ("Tile is taken!");
-          return ;
         }
 
         // fail-safe just in case a user attempts 
         //to add out-of bounds
         else if(row > 2 || tile > 2){ 
           throw new Error ("Tile or row is out of bounds!");
-          return ;
         }
 
         // place marker
         _gameBoard[row][tile] = currentPlayer.retrieveMarker();
         return true;
     }
+
+    /*
+    Resets the board iff a game is finished
+    @params
+     win - win boolean
+     draw - draw boolean
+
+     @updates
+      board
+    */
+   const resetBoard = () =>{
+    _gameBoard = [
+      ["","",""],
+      ["","",""],
+      ["","",""]
+  ];
+   }
 
     //initialize gameboard retrieval
     //note: this is created such that the user won't directly mod the board
@@ -50,7 +65,10 @@ const Gameboard = (function(){
     return{retrieveBoard,
     mark: function(row, tile){
         return _mark(row, tile, GameController.retrievePlayer());
-    }};
+    },
+   resetBoard,
+
+  };
 })();
 
 const GameController = (function(){
@@ -98,10 +116,17 @@ const GameController = (function(){
           startRound();
         }
     }
+    const resetRound = () =>{
+      switchPlayer();
+    }
     // initalize round start
     startRound();
 
-    return({retrievePlayer, playRound});
+    return({retrievePlayer, 
+      playRound,
+      resetRound,
+
+    });
 
 })();
 
@@ -329,7 +354,7 @@ const GameLogic = (() => {
     */
    const updateAnnouncer = (win, draw) => {
     // retrieve the current player
-    const player = GameController.retrievePlayer();
+    let player = GameController.retrievePlayer();
 
     // get the announcer element
     const announcer = document.querySelector(".announcer");
@@ -343,17 +368,57 @@ const GameLogic = (() => {
     // set image attribute to current player
     img.setAttribute("src",`media/${player.retrieveMarker()}.svg`);
 
-    //if win
-    if(win){
-      //keep the image, set the text content to indicate win
-      winner.textContent = "wins!";
-    }else if(draw){
-      //use announcer instead of winner selector
-      //this will reset the entire content and remove the icon
-      announcer.textContent = "Draw";
+    if(win || draw){
+        //if win
+      if(win){
+        //keep the image, set the text content to indicate win
+        winner.textContent = "wins!";
+      }else if(draw){
+        //use announcer instead of winner selector
+        //this will reset the entire content and remove the icon
+        announcer.textContent = "Draw";
+      }else{
+        announcer.textContent = "turn";
+      }
+
+      //Add a reset button to restart the game
+      const reset = document.createElement("button");
+      reset.type = "button";
+      reset.textContent = "Reset";
+      reset.classList.add("reset");
+      announcer.appendChild(reset);
+
+      //initialize reset sequence
+      reset.addEventListener("click", ()=>{
+        // Begin by resetting board and controller
+        Gameboard.resetBoard();
+        GameController.resetRound();
+
+        // reset all tiles 
+        const tiles = document.querySelectorAll(".tile");
+        tiles.forEach(tile =>{
+          // while tile has children, remove them
+          while (tile.firstChild) {
+            tile.removeChild(tile.firstChild);
+          }
+          //remove override class
+          tile.classList.remove("override", "vertical", "horizontal", "diagonal", "reverse-diagonal");
+        })
+
+        // re-initialize board
+        player = GameController.retrievePlayer();
+        img.setAttribute("src",`media/${player.retrieveMarker()}.svg`)
+        winner.textContent = "turn";
+
+        // finally, remove the button so that reset buttons won't be added again
+        reset.remove();
+
+      });
+      
     }
 
    }
+   
 
     // read board and updates accordingly
     function domMark(e){

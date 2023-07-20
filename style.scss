@@ -38,15 +38,13 @@ button{
 }
 .reset{
     cursor: pointer;
-    background-color: rgba(255, 0, 0,0.7);
-    color: white;
-    width: 100px;
+    width: 150px;
     height: 25px;
     align-self: center;
-    border-radius: 20px;
+    
     transition: 0.3s ease;
     &:hover{
-        background-color: rgba(255, 0, 0,1);;
+        border-bottom: solid black 5px;
     }
 }
 //tile properties
