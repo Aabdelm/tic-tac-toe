@@ -19,9 +19,11 @@ button{
     border: none;
 }
 .announcer{
+    display: flex;
     margin-bottom: 2rem;
     font-family: "Roboto", sans-serif;
     font-size: 2 rem;
+    gap:1rem;
 }
 
 
@@ -33,6 +35,19 @@ button{
     grid-template-columns: repeat(3, minmax(10px, 1fr));
     width: 550px;
     height: 500px;
+}
+.reset{
+    cursor: pointer;
+    background-color: rgba(255, 0, 0,0.7);
+    color: white;
+    width: 100px;
+    height: 25px;
+    align-self: center;
+    border-radius: 20px;
+    transition: 0.3s ease;
+    &:hover{
+        background-color: rgba(255, 0, 0,1);;
+    }
 }
 //tile properties
 .tile{    
@@ -110,10 +125,9 @@ Override methods
 
 .diagonal{
     // mitigate alignment issues
-    transform: rotate(42deg);
-
+    transform: rotate(42.5deg);
     width: 260px;
-    border: solid black 8px;
+    border: solid black 9px;
 }
 
 .reverse-diagonal{
@@ -122,7 +136,7 @@ Override methods
     margin-right: 15px;
 
     width: 260px;
-    border: solid black 8px
+    border: solid black 9px
 }
 //
 
